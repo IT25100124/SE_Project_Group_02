@@ -9,20 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/**
- * MODULE 1: USER MANAGEMENT — self-service profile
- *
- * Lets ANY logged-in user view and edit their own name/email/phone/username/
- * password, and delete their own account — no MANAGE_USERS permission
- * required, since these actions only ever touch the caller's own record.
- *
- * Deliberately separate from {@link UserController} (the admin-only screen):
- * this controller never reads or writes {@code role}, {@code customRole}, or
- * {@code active} — those fields simply don't exist on this form, and every
- * save here is a fetch-then-patch of only the editable fields, so there is
- * no code path by which a user could promote or reactivate themselves.
- * Changing a role remains exclusively an admin action via UserController.
- */
+
 @Controller
 @RequestMapping("/profile")
 public class ProfileController {
@@ -100,9 +87,7 @@ public class ProfileController {
         try {
             userService.deleteById(user.getId());
         } catch (DataIntegrityViolationException e) {
-            // Same reasoning as the admin delete flow: this account has related
-            // records (nominations, votes, notifications, etc.) that a hard delete
-            // would orphan. Deactivating instead preserves that history.
+       
             userService.deactivate(user.getId());
         }
 
