@@ -1,6 +1,7 @@
-package com.sliit.awardvote.user;
+package com.sliit.awardvote.user.model;
 
-import com.sliit.awardvote.common.BaseEntity;
+import com.sliit.awardvote.common.model.BaseEntity;
+
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -12,23 +13,6 @@ import jakarta.persistence.Table;
 
 import java.util.HashSet;
 import java.util.Set;
-
-/**
- * MODULE 1: USER MANAGEMENT — Roles & Permissions
- *
- * A Role is an administrator-defined, named bundle of {@link Permission}s
- * (e.g. "Regional Coordinator" -> REVIEW_NOMINATIONS + VOTE). This is
- * separate from the fixed {@link UserRole} enum, which still provides each
- * account's primary category (Public User, Judge, Awards Staff, ...) and a
- * sensible set of default permissions out of the box (see
- * {@link DefaultRolePermissions}) used whenever no custom Role is assigned.
- * Once a Role IS assigned to a User, it takes over completely — the user
- * gets exactly the permissions this Role carries, not the UserRole's
- * defaults plus this Role's (see User#hasPermission). A custom Role fully
- * defines what that person can do, rather than layering on top of something
- * else - so include everything they need, even things their base UserRole
- * would normally have granted for free.
- */
 @Entity
 @Table(name = "roles")
 public class Role extends BaseEntity {

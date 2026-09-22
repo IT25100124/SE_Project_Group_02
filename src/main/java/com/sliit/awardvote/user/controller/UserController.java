@@ -1,6 +1,12 @@
-package com.sliit.awardvote.user;
+package com.sliit.awardvote.user.controller;
 
-import com.sliit.awardvote.common.SessionUtil;
+import com.sliit.awardvote.common.util.SessionUtil;
+import com.sliit.awardvote.user.model.Permission;
+import com.sliit.awardvote.user.model.User;
+import com.sliit.awardvote.user.model.UserRole;
+import com.sliit.awardvote.user.service.RoleService;
+import com.sliit.awardvote.user.service.UserService;
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -73,9 +79,6 @@ public class UserController {
         try {
             userService.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            // This account has related records (nominations submitted, votes cast, notifications
-            // received, feedback, etc.) - the database rightly refuses to delete it out from under
-            // that history. Deactivating (Toggle) is the correct move for an account like this.
             redirectAttributes.addFlashAttribute("error",
                     "Can't delete this user - they have related records (nominations, votes, notifications, "
                             + "or similar). Use \"Toggle\" to deactivate the account instead, which keeps their history intact.");

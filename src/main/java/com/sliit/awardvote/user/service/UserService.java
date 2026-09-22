@@ -1,8 +1,12 @@
-package com.sliit.awardvote.user;
+package com.sliit.awardvote.user.service;
 
-import com.sliit.awardvote.common.AbstractCrudService;
-import com.sliit.awardvote.common.PasswordUtil;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.sliit.awardvote.common.dao.GenericDao;
+import com.sliit.awardvote.common.service.AbstractCrudService;
+import com.sliit.awardvote.common.util.PasswordUtil;
+import com.sliit.awardvote.user.model.User;
+import com.sliit.awardvote.user.model.UserRole;
+import com.sliit.awardvote.user.dao.UserDao;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,15 +15,15 @@ import java.util.Optional;
 @Service
 public class UserService extends AbstractCrudService<User, Long> {
 
-    private final UserRepository userRepository;
+    private final UserDao userDao;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     @Override
-    protected JpaRepository<User, Long> getRepository() {
-        return userRepository;
+    protected GenericDao<User, Long> getDao() {
+        return userDao;
     }
 
     /** Hook override: always hash a raw password before it is persisted. */
@@ -32,49 +36,44 @@ public class UserService extends AbstractCrudService<User, Long> {
     }
 
     public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userDao.findByUsername(username);
     }
 
     /** Used by the forgot-password flow, where the person may enter either their username or email. */
     public Optional<User> findByUsernameOrEmail(String identifier) {
-        return userRepository.findByUsername(identifier)
-                .or(() -> userRepository.findByEmail(identifier));
+        return userDao.findByUsername(identifier)
+                .or(() -> userDao.findByEmail(identifier));
     }
 
     public boolean usernameTaken(String username) {
-        return userRepository.existsByUsername(username);
+        return userDao.existsByUsername(username);
     }
 
     public boolean emailTaken(String email) {
-        return userRepository.existsByEmail(email);
+        return userDao.existsByEmail(email);
     }
 
     public List<User> findByRole(UserRole role) {
-        return userRepository.findByRole(role);
+        return userDao.findByRole(role);
     }
 
     public Optional<User> authenticate(String username, String rawPassword) {
-        return userRepository.findByUsername(username)
+        return userDao.findByUsername(username)
                 .filter(User::isActive)
                 .filter(u -> PasswordUtil.matches(rawPassword, u.getPassword()));
     }
 
     public void toggleActive(Long userId) {
-        userRepository.findById(userId).ifPresent(u -> {
+        userDao.findById(userId).ifPresent(u -> {
             u.setActive(!u.isActive());
-            userRepository.save(u);
+            userDao.save(u);
         });
     }
 
-    /**
-     * Guarantees the account ends up inactive, regardless of its current state -
-     * unlike toggleActive(), which flips whatever it currently is. Used as the
-     * fallback when a self-service or admin delete is blocked by related records.
-     */
     public void deactivate(Long userId) {
-        userRepository.findById(userId).ifPresent(u -> {
+        userDao.findById(userId).ifPresent(u -> {
             u.setActive(false);
-            userRepository.save(u);
+            userDao.save(u);
         });
     }
 }

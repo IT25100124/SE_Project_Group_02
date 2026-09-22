@@ -1,6 +1,14 @@
-package com.sliit.awardvote.user;
+package com.sliit.awardvote.user.controller;
 
-import com.sliit.awardvote.common.SessionUtil;
+import com.sliit.awardvote.common.util.SessionUtil;
+import com.sliit.awardvote.user.model.Permission;
+import com.sliit.awardvote.user.model.Role;
+import com.sliit.awardvote.user.model.User;
+import com.sliit.awardvote.user.model.UserRole;
+import com.sliit.awardvote.user.dao.UserDao;
+import com.sliit.awardvote.user.service.RoleService;
+import com.sliit.awardvote.user.util.DefaultRolePermissions;
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,11 +32,11 @@ import java.util.Set;
 public class RoleController {
 
     private final RoleService roleService;
-    private final UserRepository userRepository;
+    private final UserDao userDao;
 
-    public RoleController(RoleService roleService, UserRepository userRepository) {
+    public RoleController(RoleService roleService, UserDao userDao) {
         this.roleService = roleService;
-        this.userRepository = userRepository;
+        this.userDao = userDao;
     }
 
     private boolean canManageRoles(HttpSession session) {
@@ -78,10 +86,10 @@ public class RoleController {
         if (!canManageRoles(session)) return "redirect:/dashboard";
         // Unassign this role from any user holding it before deleting, so the
         // foreign key never dangles and no account is silently broken.
-        List<User> holders = userRepository.findByCustomRoleId(id);
+        List<User> holders = userDao.findByCustomRoleId(id);
         for (User u : holders) {
             u.setCustomRole(null);
-            userRepository.save(u);
+            userDao.save(u);
         }
         roleService.deleteById(id);
         return "redirect:/roles";

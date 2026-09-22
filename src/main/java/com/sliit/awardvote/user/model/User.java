@@ -1,6 +1,8 @@
-package com.sliit.awardvote.user;
+package com.sliit.awardvote.user.model;
 
-import com.sliit.awardvote.common.Person;
+import com.sliit.awardvote.common.model.Person;
+import com.sliit.awardvote.user.util.DefaultRolePermissions;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,27 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-/**
- * MODULE 1: USER MANAGEMENT
- * Presented by: Nawarathna H.M.L.C. (IT25100124)
- *
- * Manages accounts, roles and access permissions for everyone interacting
- * with the system, from public voters to administrators.
- *
- * OOP concepts demonstrated:
- *  - INHERITANCE: User extends Person extends BaseEntity (3-level chain)
- *  - POLYMORPHISM: overrides Person#getRoleDescription()
- *  - ENCAPSULATION: all fields private, accessed only via getters/setters
- *
- * Roles & Permissions: every user has a fixed {@link UserRole} category
- * (Public User, Judge, Awards Staff, ...) which carries sensible default
- * permissions (see {@link DefaultRolePermissions}) used whenever no custom
- * role is assigned. Once an administrator assigns an admin-created
- * {@link Role}, it takes over completely — the user gets EXACTLY the
- * permissions checked on that role, not the base role's defaults plus the
- * custom role's. {@link #hasPermission(Permission)} is the single source of
- * truth every controller checks against.
- */
 @Entity
 @Table(name = "users")
 public class User extends Person {
@@ -64,7 +45,6 @@ public class User extends Person {
         this.role = role;
     }
 
-    /** Polymorphic override - behaviour differs per role at runtime. */
     @Override
     public String getRoleDescription() {
         return switch (role) {
@@ -78,21 +58,6 @@ public class User extends Person {
         };
     }
 
-    /**
-     * True if this user may perform the given capability.
-     *
-     * - SYSTEM_ADMIN always has every permission, even if a custom role was
-     *   mistakenly assigned to them - this is a deliberate safety net so an
-     *   admin account can never accidentally lock itself out.
-     * - If a custom role IS assigned (any other account), it is the SOLE
-     *   authority: the user gets exactly the permissions checked on that
-     *   role, and nothing from their base UserRole's defaults. Select every
-     *   permission the person needs, including ones like VOTE if they
-     *   should keep that too.
-     * - If no custom role is assigned, the base UserRole's defaults apply
-     *   (see DefaultRolePermissions) - this is what makes every built-in
-     *   role work out of the box with zero configuration.
-     */
     public boolean hasPermission(Permission permission) {
         if (role == UserRole.SYSTEM_ADMIN) {
             return true;

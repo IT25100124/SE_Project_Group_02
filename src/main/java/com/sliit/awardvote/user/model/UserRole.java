@@ -1,8 +1,5 @@
-package com.sliit.awardvote.user;
+package com.sliit.awardvote.user.model;
 
-/**
- * The seven user roles identified in the SE2030 proposal (Section 5).
- */
 public enum UserRole {
     PUBLIC_USER,
     NOMINEE,

@@ -1,20 +1,13 @@
-package com.sliit.awardvote.user;
+package com.sliit.awardvote.user.util;
+
+import com.sliit.awardvote.user.model.Permission;
+import com.sliit.awardvote.user.model.UserRole;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * MODULE 1: USER MANAGEMENT — Roles & Permissions
- *
- * Every built-in {@link UserRole} ships with a sensible default set of
- * {@link Permission}s out of the box, so the permission system works
- * immediately without an administrator having to configure anything. These
- * defaults only apply while a user has no custom {@link Role} assigned —
- * once one is, it replaces these defaults entirely rather than adding to
- * them (see User#hasPermission).
- */
 public final class DefaultRolePermissions {
 
     private static final Map<UserRole, Set<Permission>> DEFAULTS = new EnumMap<>(UserRole.class);
@@ -30,7 +23,6 @@ public final class DefaultRolePermissions {
     }
 
     private DefaultRolePermissions() {
-        // utility class - no instances
     }
 
     public static Set<Permission> forRole(UserRole role) {
