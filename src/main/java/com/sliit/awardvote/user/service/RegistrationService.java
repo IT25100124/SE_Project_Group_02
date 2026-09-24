@@ -20,11 +20,9 @@ public class RegistrationService {
         this.otpService = otpService;
     }
 
-    /**
-     * Creates the account (inactive, PUBLIC_USER) and sends the first
-     * verification code. Caller is responsible for checking username/email
-     * uniqueness first.
-     */
+    
+    // Creates the account (inactive, PUBLIC_USER) and sends the first
+    
     public User register(User newUser, NotificationType channel) {
         newUser.setRole(UserRole.PUBLIC_USER);
         newUser.setActive(false); // stays disabled until the OTP is verified
@@ -32,7 +30,7 @@ public class RegistrationService {
         sendVerificationCode(saved, channel);
         return saved;
     }
-
+// verification code. Caller is responsible for checking username/email
     public void resendCode(String identifier, NotificationType channel) {
         userService.findByUsernameOrEmail(identifier)
                 .filter(u -> !u.isActive())

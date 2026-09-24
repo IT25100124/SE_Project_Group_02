@@ -26,7 +26,7 @@ public class UserService extends AbstractCrudService<User, Long> {
         return userDao;
     }
 
-    /** Hook override: always hash a raw password before it is persisted. */
+    
     @Override
     protected void beforeSave(User user) {
         if (user.getPassword() != null && user.getPassword().length() != 64) {
@@ -39,7 +39,7 @@ public class UserService extends AbstractCrudService<User, Long> {
         return userDao.findByUsername(username);
     }
 
-    /** Used by the forgot-password flow, where the person may enter either their username or email. */
+    // Used by the forgot-password flow, where the person may enter either their username or email. 
     public Optional<User> findByUsernameOrEmail(String identifier) {
         return userDao.findByUsername(identifier)
                 .or(() -> userDao.findByEmail(identifier));

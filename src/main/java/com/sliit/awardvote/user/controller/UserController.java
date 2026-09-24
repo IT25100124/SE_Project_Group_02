@@ -46,7 +46,7 @@ public class UserController {
         model.addAttribute("customRoles", roleService.findAll());
         return "users/form";
     }
-
+    //Edit User Account
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model, HttpSession session) {
         if (!canManageUsers(session)) return "redirect:/dashboard";
@@ -73,6 +73,7 @@ public class UserController {
         return "redirect:/users";
     }
 
+    //Delete User account
     @GetMapping("/{id}/delete")
     public String delete(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
         if (!canManageUsers(session)) return "redirect:/dashboard";
