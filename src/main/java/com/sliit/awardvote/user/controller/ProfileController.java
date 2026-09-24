@@ -27,7 +27,7 @@ public class ProfileController {
         model.addAttribute("user", SessionUtil.currentUser(session));
         return "users/profile";
     }
-
+    //Update the profile details
     @PostMapping("/update")
     public String update(@RequestParam String fullName,
                           @RequestParam String email,
@@ -53,7 +53,7 @@ public class ProfileController {
         model.addAttribute("success", "Your profile has been updated.");
         return "users/profile";
     }
-
+    //Delete the profile
     @PostMapping("/delete")
     public String delete(@RequestParam String currentPassword,
                           HttpSession session,
