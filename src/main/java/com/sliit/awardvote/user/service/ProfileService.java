@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-/** Self-service account changes: edit own profile, delete own account. */
+//Self-service account changes: edit own profile, delete own account.
 @Service
 public class ProfileService {
 
@@ -22,7 +22,7 @@ public class ProfileService {
         return userService.findById(userId).orElseThrow();
     }
 
-    /** Returns an error message if the new username/email clashes with another account, otherwise empty. */
+    //Returns an error message if the new username/email clashes with another account, otherwise empty.
     public Optional<String> validateUpdate(User user, String username, String email) {
         if (!username.equals(user.getUsername()) && userService.usernameTaken(username)) {
             return Optional.of("That username is already taken.");
@@ -32,9 +32,8 @@ public class ProfileService {
         }
         return Optional.empty();
     }
-
-    public User updateProfile(User user, String fullName, String email, String phone,
-                              String username, String newPassword) {
+ //Update the profile
+    public User updateProfile(User user, String fullName, String email, String phone,String username, String newPassword) {
         user.setFullName(fullName);
         user.setEmail(email);
         user.setPhone(phone);
@@ -45,11 +44,10 @@ public class ProfileService {
         return userService.save(user);
     }
 
-    /**
-     * Deletes the account after re-checking the password. If other records still
-     * reference the user, the account is deactivated instead. Returns false when
-     * the password is wrong (nothing is changed).
-     */
+    // Deletes the account after re-checking the password. If other records still
+    // reference the user, the account is deactivated instead. Returns false when
+    // the password is wrong (nothing is changed).
+
     public boolean deleteAccount(User user, String currentPassword) {
         if (!PasswordUtil.matches(currentPassword, user.getPassword())) {
             return false;

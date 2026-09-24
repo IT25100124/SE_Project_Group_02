@@ -8,17 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-/**
- * "Forgot password" flow. Code generation, dispatch and verification are
- * delegated to {@link OtpService} (purpose = PASSWORD_RESET); this class
- * only knows the password-reset-specific parts: looking the user up by
- * username/email, and actually changing the password once a code checks out.
- *
- * Deliberately never reveals whether a given username/email is registered:
- * {@link #requestReset} returns normally either way, so the controller can
- * show one uniform message and avoid leaking account existence to an
- * attacker probing the form.
- */
+
 @Service
 public class PasswordResetService {
 
@@ -40,7 +30,8 @@ public class PasswordResetService {
         otpService.issueAndSend(userOpt.get(), OtpPurpose.PASSWORD_RESET, channel, message);
     }
 
-    /** Verifies the code and, if valid, replaces the user's password. Returns false on any mismatch, expiry, or unknown identifier. */
+            //Verifies the code and, if valid, replaces the user's password. Returns false on any mismatch, expiry, or unknown identifier.
+
     public boolean verifyAndReset(String identifier, String code, String newPassword) {
         Optional<User> userOpt = userService.findByUsernameOrEmail(identifier);
         if (userOpt.isEmpty()) {
