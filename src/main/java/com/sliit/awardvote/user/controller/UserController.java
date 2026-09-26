@@ -31,6 +31,7 @@ public class UserController {
         return u != null && u.hasPermission(Permission.MANAGE_USERS);
     }
 
+     // Displays a list of all users in the system.
     @GetMapping
     public String list(Model model, HttpSession session) {
         if (!canManageUsers(session)) return "redirect:/dashboard";
@@ -55,7 +56,9 @@ public class UserController {
         model.addAttribute("customRoles", roleService.findAll());
         return "users/form";
     }
-
+    //Processes the submission of the user form (both for creating new and editing existing users).
+    //Route: POST /users/save
+    
     @PostMapping("/save")
     public String save(@ModelAttribute User user,
                         @RequestParam(required = false) Long customRoleId,
@@ -73,7 +76,10 @@ public class UserController {
         return "redirect:/users";
     }
 
-    //Delete User account
+   
+     //Attempts to permanently delete a user account from the database.
+     // Route: GET /users/{id}/delete
+     
     @GetMapping("/{id}/delete")
     public String delete(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
         if (!canManageUsers(session)) return "redirect:/dashboard";
@@ -84,6 +90,7 @@ public class UserController {
                     "Can't delete this user - they have related records (nominations, votes, notifications, "
                             + "or similar). Use \"Toggle\" to deactivate the account instead, which keeps their history intact.");
         }
+        // Always redirect back to the user list after a delete attempt
         return "redirect:/users";
     }
 }
