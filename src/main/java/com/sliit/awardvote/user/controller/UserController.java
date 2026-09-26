@@ -31,6 +31,7 @@ public class UserController {
         return u != null && u.hasPermission(Permission.MANAGE_USERS);
     }
 
+     // Displays a list of all users in the system.
     @GetMapping
     public String list(Model model, HttpSession session) {
         if (!canManageUsers(session)) return "redirect:/dashboard";
