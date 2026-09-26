@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
-/** Login and logout. Registration and password reset have their own controllers. */
+//Login and logout. Registration and password reset have their own controllers. 
 @Controller
 public class AuthController {
 
@@ -22,7 +22,7 @@ public class AuthController {
     public AuthController(UserService userService) {
         this.userService = userService;
     }
-
+    //To return the HTML containing the login form
     @GetMapping("/login")
     public String loginPage() {
         return "login";
