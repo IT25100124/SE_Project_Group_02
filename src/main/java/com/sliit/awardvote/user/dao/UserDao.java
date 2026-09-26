@@ -7,7 +7,7 @@ import com.sliit.awardvote.user.model.UserRole;
 import java.util.List;
 import java.util.Optional;
 
-/** Data access contract for {@link User}. */
+// Data access contract for {@link User}. 
 public interface UserDao extends GenericDao<User, Long> {
     Optional<User> findByUsername(String username);
 
