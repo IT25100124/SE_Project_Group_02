@@ -74,7 +74,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    /** Permanent delete by an admin / user manager. POST-only so a link or prefetch can never trigger it. */
+    // Permanent delete by an admin / user manager. POST-only so a link or prefetch can never trigger it. 
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
         if (!canManageUsers(session)) return "redirect:/dashboard";
