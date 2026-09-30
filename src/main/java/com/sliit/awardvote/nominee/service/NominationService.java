@@ -2,11 +2,11 @@ package com.sliit.awardvote.nominee.service;
 
 import com.sliit.awardvote.common.dao.GenericDao;
 import com.sliit.awardvote.common.service.AbstractCrudService;
+import com.sliit.awardvote.nominee.event.NominationReviewedEvent;
 import com.sliit.awardvote.nominee.model.Nomination;
 import com.sliit.awardvote.nominee.model.NominationStatus;
 import com.sliit.awardvote.nominee.dao.NominationDao;
-import com.sliit.awardvote.notification.service.NotificationService;
-
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,12 +15,12 @@ import java.util.List;
 public class NominationService extends AbstractCrudService<Nomination, Long> {
 
     private final NominationDao nominationDao;
-    private final NotificationService notificationService;
+    private final ApplicationEventPublisher eventPublisher;
 
     public NominationService(NominationDao nominationDao,
-                              NotificationService notificationService) {
+                              ApplicationEventPublisher eventPublisher) {
         this.nominationDao = nominationDao;
-        this.notificationService = notificationService;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -60,7 +60,8 @@ public class NominationService extends AbstractCrudService<Nomination, Long> {
         nomination.setStatus(decision);
         nomination.setReviewComment(comment);
         nominationDao.save(nomination);
-        notificationService.notifyReviewDecision(nomination);
+        // Observer pattern: publish the event; listeners (e.g. notifications) react to it.
+        eventPublisher.publishEvent(new NominationReviewedEvent(nomination));
     }
 
     // ---------- Dashboard aggregation ----------
