@@ -40,8 +40,15 @@ public class UserController {
       // Find and display all users
     @GetMapping
     public String list(Model model, HttpSession session) {
-        if (!canManageUsers(session)) return "redirect:/dashboard";
+        // Check user permission
+        if (!canManageUsers(session)) 
+            
+            return "redirect:/dashboard";
+
+        // Find all users from the database
         model.addAttribute("users", userService.findAll());
+
+         // Open the users list page
         return "users/list";
     }
 
