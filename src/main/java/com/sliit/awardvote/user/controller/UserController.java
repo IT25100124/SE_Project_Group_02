@@ -21,17 +21,23 @@ public class UserController {
 
     private final UserService userService;
     private final RoleService roleService;
-
+    
+    // Constructor to inject UserService and RoleService
     public UserController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
 
+    // Check whether the logged-in user has permission to manage users
+
     private boolean canManageUsers(HttpSession session) {
         User u = SessionUtil.currentUser(session);
+
+        // Return true if user exists and has MANAGE_USERS permission
         return u != null && u.hasPermission(Permission.MANAGE_USERS);
     }
 
+      // Find and display all users
     @GetMapping
     public String list(Model model, HttpSession session) {
         if (!canManageUsers(session)) return "redirect:/dashboard";
