@@ -93,50 +93,107 @@ public class UserController {
         return "users/form";
     }
 
+    // Save a new user or update an existing user
     @PostMapping("/save")
     public String save(@ModelAttribute User user,
-                        @RequestParam(required = false) Long customRoleId,
-                        HttpSession session) {
-        if (!canManageUsers(session)) return "redirect:/dashboard";
-        user.setCustomRole(customRoleId != null ? roleService.findById(customRoleId).orElse(null) : null);
+                       @RequestParam(required = false) Long customRoleId,
+                       HttpSession session) {
+
+        // Check user permission
+        if (!canManageUsers(session))
+            return "redirect:/dashboard";
+
+        // Find the selected custom role by ID
+        user.setCustomRole(
+                customRoleId != null
+                        ? roleService.findById(customRoleId).orElse(null)
+                        : null
+        );
+
+        // Save the user in the database
         userService.save(user);
+
+        // Return to the users list
         return "redirect:/users";
     }
 
+    // Find a user by ID and change their active status
     @GetMapping("/{id}/toggle")
-    public String toggle(@PathVariable Long id, HttpSession session) {
-        if (!canManageUsers(session)) return "redirect:/dashboard";
+    public String toggle(@PathVariable Long id,
+                          HttpSession session) {
+
+        // Check user permission
+        if (!canManageUsers(session))
+            return "redirect:/dashboard";
+
+        // Find the user and change active/inactive status
         userService.toggleActive(id);
+
+        // Return to the users list
         return "redirect:/users";
     }
 
-    /** Permanent delete by an admin / user manager. POST-only so a link or prefetch can never trigger it. */
+    // Permanently delete a user
+    // POST is used so that a normal link or browser prefetch cannot delete a user
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
-        if (!canManageUsers(session)) return "redirect:/dashboard";
+    public String delete(@PathVariable Long id,
+                          HttpSession session,
+                          RedirectAttributes redirectAttributes) {
+
+        // Check user permission
+        if (!canManageUsers(session))
+            return "redirect:/dashboard";
+
+        // Find the currently logged-in user
         User actor = SessionUtil.currentUser(session);
 
+        // Prevent an admin from deleting their own account here
         if (actor.getId().equals(id)) {
-            redirectAttributes.addFlashAttribute("error",
-                    "To delete your own account, use My Profile > Delete My Account (it asks for your password).");
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "To delete your own account, use My Profile > Delete My Account (it asks for your password)."
+            );
+
             return "redirect:/users";
         }
 
+        // Find the user that should be deleted
         User target = userService.findById(id).orElse(null);
+
+        // Check whether the user exists
         if (target == null) {
-            redirectAttributes.addFlashAttribute("error", "That account no longer exists.");
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "That account no longer exists."
+            );
+
             return "redirect:/users";
         }
 
-        Optional<String> refusal = userService.validateDeletion(actor, target);
+        // Check whether the current user is allowed to delete the target user
+        Optional<String> refusal =
+                userService.validateDeletion(actor, target);
+
+        // If deletion is not allowed, show the reason
         if (refusal.isPresent()) {
-            redirectAttributes.addFlashAttribute("error", refusal.get());
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    refusal.get()
+            );
+
             return "redirect:/users";
         }
 
+        // Permanently delete the user from the database
         userService.deletePermanently(id);
-        redirectAttributes.addFlashAttribute("success",
-                "Account \"" + target.getUsername() + "\" was permanently deleted.");
+
+        // Show a success message
+        redirectAttributes.addFlashAttribute(
+                "success",
+                "Account \"" + target.getUsername() + "\" was permanently deleted."
+        );
+
+        // Return to the users list
         return "redirect:/users";
     }
 }
