@@ -52,12 +52,24 @@ public class UserController {
         return "users/list";
     }
 
+
+    // Open the form to create a new user
     @GetMapping("/new")
     public String newForm(Model model, HttpSession session) {
+
+    // Check user permission
         if (!canManageUsers(session)) return "redirect:/dashboard";
+
+        // Create an empty User object for the form
         model.addAttribute("user", new User());
+
+        // Find all available system roles
         model.addAttribute("roles", UserRole.values());
+
+        // Find all custom roles from the database
         model.addAttribute("customRoles", roleService.findAll());
+        
+        // Open the user form page
         return "users/form";
     }
 
