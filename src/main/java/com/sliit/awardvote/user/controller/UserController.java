@@ -68,17 +68,28 @@ public class UserController {
 
         // Find all custom roles from the database
         model.addAttribute("customRoles", roleService.findAll());
-        
+
         // Open the user form page
         return "users/form";
     }
 
+    // Find a user by ID and open the edit form
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model, HttpSession session) {
+
+        // Check user permission
         if (!canManageUsers(session)) return "redirect:/dashboard";
+        // Find the user using the given ID
+
         model.addAttribute("user", userService.findById(id).orElseThrow());
+
+        // Find all available system roles
         model.addAttribute("roles", UserRole.values());
+
+        // Find all custom roles from the database
         model.addAttribute("customRoles", roleService.findAll());
+
+        // Open the user form page
         return "users/form";
     }
 
