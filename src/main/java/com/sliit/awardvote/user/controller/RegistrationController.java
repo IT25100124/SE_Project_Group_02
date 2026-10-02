@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
-/** Registration (OTP-verified via Email or SMS). */
+//Registration (OTP-verified via Email or SMS). 
 @Controller
 public class RegistrationController {
 
-    /** Shortest password accepted when creating an account. */
+    //Shortest password accepted when creating an account. 
     private static final int MIN_PASSWORD_LENGTH = 5;
 
     private final UserService userService;
