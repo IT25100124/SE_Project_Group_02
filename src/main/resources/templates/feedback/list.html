@@ -61,6 +61,28 @@
             </tbody>
         </table>
     </div>
+
+    <div th:if="${awardFeedbackItems != null}">
+        <div class="ledger-rule mt-4"><span><i class="bi bi-trophy me-1"></i>Award Programme Feedback (Module 2 comments)</span></div>
+        <div class="table-responsive av-card">
+            <table class="table table-ledger mb-0 align-middle">
+                <thead><tr><th>Award Programme</th><th>Posted By</th><th>Message</th><th>Date</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="af : ${awardFeedbackItems}">
+                    <td><a th:href="@{'/awards/' + ${af.awardProgramme.id}}" th:text="${af.awardProgramme.name}">Programme</a></td>
+                    <td th:text="${af.user != null ? af.user.fullName : 'User'}">User</td>
+                    <td th:text="${af.message}">Message</td>
+                    <td class="text-muted small" th:text="${#temporals.format(af.createdAt, 'dd MMM yyyy, HH:mm')}">Date</td>
+                    <td>
+                        <a th:href="@{'/awards/feedback/' + ${af.id} + '/delete'(from='admin')}" class="btn btn-sm btn-outline-danger"
+                           onclick="return confirm('Remove this feedback?')"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(awardFeedbackItems)}"><td colspan="5" class="text-center text-muted py-4"><i class="bi bi-inbox fs-3 d-block mb-2"></i>No award programme feedback yet.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <div th:replace="~{fragments/footer :: footer}"></div>

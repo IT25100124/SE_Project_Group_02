@@ -1,5 +1,6 @@
 package com.sliit.awardvote.notification.controller;
 
+import com.sliit.awardvote.award.service.AwardFeedbackService;
 import com.sliit.awardvote.common.util.SessionUtil;
 import com.sliit.awardvote.notification.model.Feedback;
 import com.sliit.awardvote.notification.model.FeedbackStatus;
@@ -21,9 +22,11 @@ import org.springframework.web.bind.annotation.*;
 public class FeedbackController {
 
     private final FeedbackService feedbackService;
+    private final AwardFeedbackService awardFeedbackService;
 
-    public FeedbackController(FeedbackService feedbackService) {
+    public FeedbackController(FeedbackService feedbackService, AwardFeedbackService awardFeedbackService) {
         this.feedbackService = feedbackService;
+        this.awardFeedbackService = awardFeedbackService;
     }
 
     private boolean canHandleFeedback(HttpSession session) {
@@ -39,9 +42,12 @@ public class FeedbackController {
     }
 
     @GetMapping("/feedback")
-    public String feedbackList(Model model) {
+    public String feedbackList(Model model, HttpSession session) {
         model.addAttribute("feedbackItems", feedbackService.findAll());
         model.addAttribute("newFeedback", new Feedback());
+        if (canHandleFeedback(session)) {
+            model.addAttribute("awardFeedbackItems", awardFeedbackService.findAll());
+        }
         return "feedback/list";
     }
 
