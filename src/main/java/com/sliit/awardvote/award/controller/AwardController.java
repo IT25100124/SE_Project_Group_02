@@ -86,12 +86,6 @@ public class AwardController {
             model.addAttribute("yearError", "Year must be " + MIN_YEAR + " or later.");
             return "awards/form";
         }
-        var statusError = awardService.validateStatusChange(programme);
-        if (statusError.isPresent()) {
-            model.addAttribute("statuses", AwardStatus.values());
-            model.addAttribute("statusError", statusError.get());
-            return "awards/form";
-        }
         awardService.save(programme);
         return "redirect:/awards";
     }
