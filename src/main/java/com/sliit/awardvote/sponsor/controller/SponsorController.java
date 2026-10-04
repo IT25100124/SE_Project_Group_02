@@ -30,7 +30,7 @@ public class SponsorController {
 
     @GetMapping("/sponsors")
     public String list(Model model) {
-        model.addAttribute("sponsors", sponsorService.findAll());
+        model.addAttribute("sponsors", sponsorService.findAllForDisplay());
         return "sponsors/list";
     }
 

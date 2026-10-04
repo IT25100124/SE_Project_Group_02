@@ -12,7 +12,6 @@ import com.sliit.awardvote.content.service.FaqService;
 import com.sliit.awardvote.sponsor.model.Sponsor;
 import com.sliit.awardvote.sponsor.model.SponsorTier;
 import com.sliit.awardvote.sponsor.service.SponsorService;
-import com.sliit.awardvote.sponsor.util.SponsorBuilder;
 import com.sliit.awardvote.user.model.Permission;
 import com.sliit.awardvote.user.model.Role;
 import com.sliit.awardvote.user.model.User;
@@ -108,12 +107,12 @@ public class DataSeeder implements CommandLineRunner {
         category.setAwardProgramme(programme);
         categoryService.save(category);
 
-        Sponsor sponsor = new SponsorBuilder("Ceylon Tech Holdings")
-                .contactPerson("Ms. Perera")
-                .email("partnerships@ceylontech.lk")
-                .tier(SponsorTier.PLATINUM)
-                .description("Platinum sponsor supporting the 2026 awards season.")
-                .build();
+        Sponsor sponsor = new Sponsor();
+        sponsor.setName("Ceylon Tech Holdings");
+        sponsor.setContactPerson("Ms. Perera");
+        sponsor.setEmail("partnerships@ceylontech.lk");
+        sponsor.setTier(SponsorTier.PLATINUM);
+        sponsor.setDescription("Platinum sponsor supporting the 2026 awards season.");
         sponsorService.save(sponsor);
 
         Announcement announcement = new Announcement();
