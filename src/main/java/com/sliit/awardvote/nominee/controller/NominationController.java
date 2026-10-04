@@ -2,7 +2,7 @@ package com.sliit.awardvote.nominee.controller;
 
 import com.sliit.awardvote.award.model.Category;
 import com.sliit.awardvote.award.service.CategoryService;
-import com.sliit.awardvote.common.util.SessionUtil;
+import com.sliit.awardvote.common.util.SessionUtil; //Retrieve the logged in user
 import com.sliit.awardvote.nominee.model.Nomination;
 import com.sliit.awardvote.nominee.model.NominationStatus;
 import com.sliit.awardvote.nominee.service.NominationService;
@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//Handles web requests
 @Controller
 public class NominationController {
 
@@ -36,6 +37,7 @@ public class NominationController {
         this.scoreService = scoreService;
     }
 
+    //Loads the nomination page
     @GetMapping("/nominations")
     public String list(Model model, HttpSession session) {
         User current = SessionUtil.currentUser(session);
@@ -59,7 +61,7 @@ public class NominationController {
                 voteService.findVoteInCategory(category.getId(), current.getId())
                         .ifPresent(v -> myVotes.put(category.getId(), v.getNomination().getId()));
                 approvedByCategory.put(category.getId(), nominationService.findApprovedByCategory(category.getId()));
-            }
+            } //gets only approved nominations for that category
             model.addAttribute("myVotes", myVotes);
             model.addAttribute("approvedByCategory", approvedByCategory);
         }
@@ -80,9 +82,10 @@ public class NominationController {
             model.addAttribute("approvedByCategoryForJudging", approvedByCategoryForJudging);
         }
 
-        return "nominations/list";
+        return "nominations/list"; //return the JSP
     }
 
+    //Create
     @GetMapping("/nominations/new")
     public String newForm(Model model) {
         Nomination nomination = new Nomination();
@@ -103,6 +106,7 @@ public class NominationController {
         return "redirect:/nominations";
     }
 
+    //Edit
     @GetMapping("/nominations/{id}/edit")
     public String editForm(@PathVariable Long id, Model model, HttpSession session) {
         User current = SessionUtil.currentUser(session);
@@ -115,6 +119,7 @@ public class NominationController {
         return "nominations/form";
     }
 
+    //Update
     @PostMapping("/nominations/{id}/update")
     public String update(@PathVariable Long id,
                           @ModelAttribute Nomination nomination,
@@ -137,6 +142,7 @@ public class NominationController {
         return "redirect:/nominations/" + id;
     }
 
+    //Delete
     @PostMapping("/nominations/{id}/delete")
     public String delete(@PathVariable Long id, HttpSession session) {
         User current = SessionUtil.currentUser(session);
@@ -146,6 +152,7 @@ public class NominationController {
         return "redirect:/nominations";
     }
 
+    //Read
     @GetMapping("/nominations/{id}")
     public String view(@PathVariable Long id, Model model, HttpSession session) {
         Nomination nomination = nominationService.findById(id).orElseThrow();
@@ -164,6 +171,7 @@ public class NominationController {
         return "nominations/view";
     }
 
+    //Review
     @PostMapping("/nominations/{id}/review")
     public String review(@PathVariable Long id,
                           @RequestParam NominationStatus decision,
