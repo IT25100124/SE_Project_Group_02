@@ -12,8 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-/** Handles a judge's pick (score) for an approved nominee. */
-@Controller
+//Handles a judge's pick (score) for an approved nominee
+@Controller //web controller
 public class ScoreController {
 
     private final NominationService nominationService;
@@ -35,15 +35,15 @@ public class ScoreController {
                 && scoreService.submitScore(nomination, judge, value, comments);
         if (success) {
             model.addAttribute("scoreMessage", "Your pick for this category has been recorded.");
-        } else if (nomination.getCategory() != null
+        } else if (nomination.getCategory() != null  //if the judge already judge that category
                 && scoreService.findScoreInCategory(nomination.getCategory().getId(), judge.getId()).isPresent()) {
             model.addAttribute("scoreMessage", "You've already judged a nominee in this category — only one pick per category is allowed.");
         } else {
             model.addAttribute("scoreMessage", "Could not submit your pick (nomination not approved, or judging isn't enabled for this category).");
         }
         Nomination refreshed = nominationService.findById(id).orElseThrow();
-        model.addAttribute("nomination", refreshed);
-        if (refreshed.getCategory() != null) {
+        model.addAttribute("nomination", refreshed); //put refreshed nomination into the Model
+        if (refreshed.getCategory() != null) { //find the judge's existing judgment
             scoreService.findScoreInCategory(refreshed.getCategory().getId(), judge.getId())
                     .ifPresent(s -> model.addAttribute("existingJudgmentNominee", s.getNomination()));
         }
