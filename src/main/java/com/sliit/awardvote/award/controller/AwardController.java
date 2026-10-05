@@ -1,5 +1,6 @@
 package com.sliit.awardvote.award.controller;
 
+//Model class
 import com.sliit.awardvote.notification.model.AwardFeedback;
 import com.sliit.awardvote.award.model.AwardProgramme;
 import com.sliit.awardvote.award.model.AwardStatus;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class AwardController {
+public class AwardController { // Handle the http reqst and send the service layer
 
     /** Awards can only be created for this year or later. */
     private static final int MIN_YEAR = 2026;
