@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1d826d48-1f6c-499e-936d-4252c43793f1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/main/java/com/sliit/awardvote/nominee/controller/VoteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/main/java/com/sliit/awardvote/nominee/controller/VoteController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/java/com/sliit/awardvote/nominee/dao/NominationDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/main/java/com/sliit/awardvote/nominee/dao/NominationDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/java/com/sliit/awardvote/nominee/dao/NominationDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/main/java/com/sliit/awardvote/nominee/dao/NominationDaoImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
