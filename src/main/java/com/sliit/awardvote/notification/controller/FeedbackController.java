@@ -1,6 +1,6 @@
 package com.sliit.awardvote.notification.controller;
 
-import com.sliit.awardvote.award.service.AwardFeedbackService;
+import com.sliit.awardvote.notification.service.AwardFeedbackService;
 import com.sliit.awardvote.common.util.SessionUtil;
 import com.sliit.awardvote.notification.model.Feedback;
 import com.sliit.awardvote.notification.model.FeedbackStatus;
