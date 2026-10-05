@@ -1,10 +1,10 @@
 package com.sliit.awardvote.award.controller;
 
-import com.sliit.awardvote.award.model.AwardFeedback;
+import com.sliit.awardvote.notification.model.AwardFeedback;
 import com.sliit.awardvote.award.model.AwardProgramme;
 import com.sliit.awardvote.award.model.AwardStatus;
 import com.sliit.awardvote.award.model.Category;
-import com.sliit.awardvote.award.service.AwardFeedbackService;
+import com.sliit.awardvote.notification.service.AwardFeedbackService;
 import com.sliit.awardvote.award.service.AwardService;
 import com.sliit.awardvote.award.service.CategoryService;
 import com.sliit.awardvote.common.util.SessionUtil;
