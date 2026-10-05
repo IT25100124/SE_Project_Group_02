@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Repository
-@Transactional(readOnly = true)
+@Repository //tells Spring this is a DAO class
+@Transactional(readOnly = true)  //read data from the database
 public class NominationDaoImpl extends AbstractJpaDao<Nomination> implements NominationDao {
 
     public NominationDaoImpl() {
