@@ -12,20 +12,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-/** Handles casting a public vote for an approved nominee. */
+//Handles casting a public vote for an approved nominee.
 @Controller
 public class VoteController {
 
     private final NominationService nominationService;
     private final VoteService voteService;
 
+    //allows Spring to provide the required service objects to the controller
     public VoteController(NominationService nominationService, VoteService voteService) {
         this.nominationService = nominationService;
         this.voteService = voteService;
     }
 
+    //handles a POST request when someone votes
     @PostMapping("/nominations/{id}/vote")
-    public String vote(@PathVariable Long id, HttpSession session, Model model) {
+    public String vote(@PathVariable Long id, HttpSession session, Model model) { //Gets the nomination ID from the URL
         Nomination nomination = nominationService.findById(id).orElseThrow();
         User voter = SessionUtil.currentUser(session);
         boolean success = voter.hasPermission(Permission.VOTE) && voteService.castVote(nomination, voter);
