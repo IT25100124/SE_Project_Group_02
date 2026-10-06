@@ -6,3 +6,4 @@ public enum AwardStatus {
     CLOSED,
     COMPLETED
 }
+

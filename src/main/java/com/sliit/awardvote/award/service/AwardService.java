@@ -10,12 +10,12 @@ import com.sliit.awardvote.common.service.AbstractCrudService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service //Spring service layer class
 public class AwardService extends AbstractCrudService<AwardProgramme, Long> {
-
+    //Dependencies
     private final AwardDao awardDao;
     private final ApplicationEventPublisher eventPublisher;
-
+   //constructor injection
     public AwardService(AwardDao awardDao, ApplicationEventPublisher eventPublisher) {
         this.awardDao = awardDao;
         this.eventPublisher = eventPublisher;
@@ -40,12 +40,12 @@ public class AwardService extends AbstractCrudService<AwardProgramme, Long> {
      * service does not need to know who they are.
      */
     @Override
-    public AwardProgramme save(AwardProgramme programme) {
-        AwardStatus oldStatus = programme.getId() == null
+    public AwardProgramme save(AwardProgramme programme) { //Save -Status change check
+        AwardStatus oldStatus = programme.getId() == null //Check the programme new or old
                 ? null
                 : awardDao.findById(programme.getId()).map(AwardProgramme::getStatus).orElse(null);
         AwardProgramme saved = super.save(programme);
-        if (oldStatus != null && saved.getStatus() != oldStatus) {
+        if (oldStatus != null && saved.getStatus() != oldStatus) { //checking if the status has changed.
             eventPublisher.publishEvent(new AwardStatusChangedEvent(saved, oldStatus));
         }
         return saved;

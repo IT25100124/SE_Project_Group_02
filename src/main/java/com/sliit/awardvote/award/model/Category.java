@@ -21,19 +21,20 @@ import java.util.Set;
 @Table(name = "categories")
 public class Category extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false) //Store the category name
     private String name;
 
     @Column(length = 1000)
     private String description;
 
-    @Column(length = 1000)
+    @Column(length = 1000)//The criteria defining who is eligible for this category.
     private String eligibilityCriteria;
 
     private LocalDateTime votingStart;
     private LocalDateTime votingEnd;
 
-    private boolean judgingEnabled = false;
+    private boolean judgingEnabled = false; //the judging function is enabled or not.
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "programme_id")
