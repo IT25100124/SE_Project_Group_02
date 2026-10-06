@@ -1,4 +1,4 @@
-package com.sliit.awardvote.award.model;
+package com.sliit.awardvote.award.model; // Represent the Award programme
 
 import com.sliit.awardvote.common.model.BaseEntity;
 import com.sliit.awardvote.sponsor.model.Sponsor;
@@ -20,21 +20,27 @@ import java.util.Set;
  *  - MANY-TO-MANY with Sponsor (a programme can have several sponsors,
  *    a sponsor can back several programmes)
  */
+//This tells JPA that this Java class is an entity mapped to a database table.
 @Entity
-@Table(name = "award_programmes")
+@Table(name = "award_programmes") // Database table name
 public class AwardProgramme extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false) //The field that stores the program name.
     private String name;
 
-    @Column(length = 2000)
+    @Column(length = 2000) //Store the programme description
     private String description;
 
     private int year;
 
-    @Enumerated(EnumType.STRING)
-    private AwardStatus status = AwardStatus.DRAFT;
+    //Store the programme current status
+    @Enumerated(EnumType.STRING)//enum-save the string type
+    private AwardStatus status = AwardStatus.DRAFT; // deafult status is DRAFT
 
+    //one award programme---Many categories
+    //mappedBy--The awardprogramme field manage relationship
+    //cascade--Operations performed on the program cascade down to its categories as required.
+    //If a category is removed from the program and becomes an orphan, JPA is instructed to remove that orphan record from the database as well.
     @OneToMany(mappedBy = "awardProgramme", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Category> categories = new HashSet<>();
 
