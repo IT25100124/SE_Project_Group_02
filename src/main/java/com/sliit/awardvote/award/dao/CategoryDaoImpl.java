@@ -8,12 +8,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+//making CategoryDaoImpl a Spring Repository bean.
 @Repository
+//This indicates that the operations of this DAO are executed within a read-only transaction.
 @Transactional(readOnly = true)
 public class CategoryDaoImpl extends AbstractJpaDao<Category> implements CategoryDao {
 
     public CategoryDaoImpl() {
-        super(Category.class);
+        super(Category.class);//Parent class constructor
     }
 
     @Override
